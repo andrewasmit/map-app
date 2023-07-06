@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, Button, TextInput, View } from 'react-native';
 import MapView from 'react-native-maps'
 import * as Location from 'expo-location'
 
 export default function App() {
   const [location, setLocation] = useState();
+  const [address, setAddress] = useState();
 
   useEffect(()=>{
     const getPermissions = async ()=>{
@@ -26,9 +27,22 @@ export default function App() {
     console.log(region);
   }, []);
 
+  const handleAddressInput = useCallback((e)=>{
+    setAddress(e)
+  }, [address]);
+
+  const geocode = async ()=>{
+    const geocodedLocation = await Location.geocodeAsync(address);
+    console.log("Geocoded Address: ", geocodedLocation);
+    setAddress("");
+  }
+
+
   return (
     <View style={styles.container}>
-      <MapView 
+      <TextInput placeholder="Address" value={address} onChangeText={handleAddressInput} />
+      <Button title="Geocode Address" onPress={geocode} />
+      {/* <MapView 
         style={styles.map}
         onRegionChange={onRegionChange}
         initialRegion={{
@@ -39,7 +53,7 @@ export default function App() {
           longitudeDelta: 0.5265133564613365
         }}
       >
-      </MapView>
+      </MapView> */}
       <StatusBar style="auto" />
     </View>
   );
