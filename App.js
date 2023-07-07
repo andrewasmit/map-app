@@ -59,6 +59,10 @@ export default function App() {
 
       <GooglePlacesAutocomplete
         placeholder="Search"
+        fetchDetails={true}
+        GooglePlacesSearchQuery={{
+          rankby: 'distance'
+        }}
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
           console.log(data, details);
@@ -66,6 +70,11 @@ export default function App() {
         query={{
           key: "",
           language: "en",
+          components: 'country:us',
+          types: 'establishment',
+          // **** Look in docs for all the different types to search for ****
+          radius: 30000,
+          location: `${location.latitude}, ${location.longitude} `
         }}
         styles={{
           container: { flex: 0, position: 'absolute', width: '100%', zIndex: 1 },
