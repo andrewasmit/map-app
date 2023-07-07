@@ -5,6 +5,7 @@ import MapView, { Callout, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { API_KEY } from '@env'
+import Autocomplete from "./Autocomplete";
 
 
 export default function App() {
@@ -58,31 +59,8 @@ export default function App() {
     <View style={{marginTop: 50, flex:1}}>
       {/* <TextInput placeholder="Address" value={address} onChangeText={handleAddressInput} />
       <Button title="Geocode Address" onPress={geocode} /> */}
-
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        fetchDetails={true}
-        GooglePlacesSearchQuery={{
-          rankby: 'distance'
-        }}
-        onPress={(data, details = null) => {
-          console.log(data, details);
-        }}
-        query={{
-          key: API_KEY,
-          language: "en",
-          components: 'country:us',
-          types: 'establishment',
-          // **** Look in docs for all the different types to search for ****
-          radius: 30000,
-          location: `${myLocation.latitude}, ${myLocation.longitude}`
-        }}
-        styles={{
-          container: { flex: 0, position: 'absolute', width: '100%', zIndex: 1 },
-          listView: { backgroundColor: 'white' }
-        }}
-      />
-
+      <Autocomplete myLocation={myLocation}/>
+    
       <MapView
         style={styles.map}
         onRegionChange={onRegionChange}
