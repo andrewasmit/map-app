@@ -19,19 +19,22 @@ export default function App() {
       } 
       
       let currentLocation = await Location.getCurrentPositionAsync();
-      setLocation(currentLocation);
-      // console.log("Location: ", currentLocation);
+      setLocation({
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude
+      });
+      console.log("Location AFTER PERMISSION: ", location);
     }
     getPermissions();
   }, []);
 
 
   if(location){
-    console.log("LOCATION :", location)
+    // console.log("LOCATION: ", location)
   }
 
   const onRegionChange = useCallback((region) =>{
-    console.log("CHANGED REGION: ", region);
+    // console.log("CHANGED REGION: ", region);
   }, []);
 
 
@@ -62,9 +65,12 @@ export default function App() {
       >
         <Marker 
           coordinate={{
-            latitude: 32.8053592247793, 
-            longitude: -96.79484700876957
+            latitude: location.latitude ,
+            longitude: location.longitude
           }} 
+          draggable={true}
+          onDragStart={(e)=>console.log("Drag start: ", e.nativeEvent.coordinates)}
+          onDragEnd={(e)=>console.log("Drag end: ", e.nativeEvent.coordinates)}
         >
           <Callout>
             <Text>I am here.</Text>
