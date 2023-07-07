@@ -8,6 +8,7 @@ export default function App() {
   const [location, setLocation] = useState();
   const [address, setAddress] = useState();
 
+
   useEffect(()=>{
     const getPermissions = async ()=>{
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -37,12 +38,11 @@ export default function App() {
     setAddress("");
   }
 
-
   return (
     <View style={styles.container}>
       <TextInput placeholder="Address" value={address} onChangeText={handleAddressInput} />
       <Button title="Geocode Address" onPress={geocode} />
-      {/* <MapView 
+      <MapView 
         style={styles.map}
         onRegionChange={onRegionChange}
         initialRegion={{
@@ -53,7 +53,7 @@ export default function App() {
           longitudeDelta: 0.5265133564613365
         }}
       >
-      </MapView> */}
+      </MapView>
       <StatusBar style="auto" />
     </View>
   );
@@ -68,6 +68,6 @@ const styles = StyleSheet.create({
   },
   map:{
     width: '100%',
-    height: '100%'
+    height: '80%'
   }
 });
