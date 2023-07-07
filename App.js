@@ -4,14 +4,16 @@ import { StyleSheet, Text, Button, TextInput, View } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { API_KEY } from '@env'
 
 
 export default function App() {
-  const [location, setLocation] = useState({
+  const [myLocation, setMyLocation] = useState({
     latitude: 32.8053592247793,
     longitude: -96.79484700876957,
   });
-  const [address, setAddress] = useState();
+  // const [address, setAddress] = useState();
+  // const [region, setRegion] = useState();
 
   useEffect(() => {
     const getPermissions = async () => {
@@ -22,11 +24,11 @@ export default function App() {
       }
 
       let currentLocation = await Location.getCurrentPositionAsync();
-      setLocation({
+      setMyLocation({
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
       });
-      console.log("Location AFTER PERMISSION: ", location);
+      console.log("Location AFTER PERMISSION: ", myLocation);
     };
     getPermissions();
   }, []);
@@ -39,18 +41,18 @@ export default function App() {
     // console.log("CHANGED REGION: ", region);
   }, []);
 
-  const handleAddressInput = useCallback(
-    (e) => {
-      setAddress(e);
-    },
-    [address]
-  );
+  // const handleAddressInput = useCallback(
+  //   (e) => {
+  //     setAddress(e);
+  //   },
+  //   [address]
+  // );
 
-  const geocode = async () => {
-    const geocodedLocation = await Location.geocodeAsync(address);
-    console.log("Geocoded Address: ", geocodedLocation);
-    setAddress("");
-  };
+  // const geocode = async () => {
+  //   const geocodedLocation = await Location.geocodeAsync(address);
+  //   console.log("Geocoded Address: ", geocodedLocation);
+  //   setAddress("");
+  // };
 
   return (
     <View style={{marginTop: 50, flex:1}}>
@@ -64,17 +66,16 @@ export default function App() {
           rankby: 'distance'
         }}
         onPress={(data, details = null) => {
-          // 'details' is provided when fetchDetails = true
           console.log(data, details);
         }}
         query={{
-          key: "",
+          key: API_KEY,
           language: "en",
           components: 'country:us',
           types: 'establishment',
           // **** Look in docs for all the different types to search for ****
           radius: 30000,
-          location: `${location.latitude}, ${location.longitude} `
+          location: `${myLocation.latitude}, ${myLocation.longitude}`
         }}
         styles={{
           container: { flex: 0, position: 'absolute', width: '100%', zIndex: 1 },
@@ -95,8 +96,8 @@ export default function App() {
       >
         <Marker
           coordinate={{
-            latitude: location.latitude,
-            longitude: location.longitude,
+            latitude: myLocation.latitude,
+            longitude: myLocation.longitude,
           }}
           draggable={true}
           onDragStart={(e) =>
