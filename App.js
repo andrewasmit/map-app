@@ -1,19 +1,19 @@
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useState, useEffect } from "react";
-import { StyleSheet, Text, Button, TextInput, View } from "react-native";
-import MapView, { Callout, Marker } from "react-native-maps";
+import { View } from "react-native";
 import * as Location from "expo-location";
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { API_KEY } from '@env'
 import Autocomplete from "./Autocomplete";
+import Map from "./Map";
 
 
 export default function App() {
   const [myLocation, setMyLocation] = useState({
     latitude: 32.8053592247793,
+    latitudeDelta: 0.865790580988083,
     longitude: -96.79484700876957,
+    longitudeDelta: 0.5265133564613365,
   });
-  // const [address, setAddress] = useState();
+
   // const [region, setRegion] = useState();
 
   useEffect(() => {
@@ -23,85 +23,41 @@ export default function App() {
         console.log("Please grant permission");
         return;
       }
-
       let currentLocation = await Location.getCurrentPositionAsync();
       setMyLocation({
         latitude: currentLocation.coords.latitude,
+        latitudeDelta: 0.865790580988083,
         longitude: currentLocation.coords.longitude,
+        longitudeDelta: 0.5265133564613365
       });
       console.log("Location AFTER PERMISSION: ", myLocation);
     };
     getPermissions();
   }, []);
 
-  // if(location){
-  //   console.log("LOCATION: ", location)
-  // }
-
-  const onRegionChange = useCallback((region) => {
-    // console.log("CHANGED REGION: ", region);
-  }, []);
-
-  // const handleAddressInput = useCallback(
-  //   (e) => {
-  //     setAddress(e);
-  //   },
-  //   [address]
-  // );
-
-  // const geocode = async () => {
-  //   const geocodedLocation = await Location.geocodeAsync(address);
-  //   console.log("Geocoded Address: ", geocodedLocation);
-  //   setAddress("");
-  // };
+  const geocode = async (region)=>{
+    const geocodedLocation = await Location.geocodeAsync(region);
+    console.log("Geocoded Location: ")
+    setMyLocation({
+      latitude: geocodedLocation[0].latitude,
+      latitudeDelta: 0.1874635234195665,
+      longitude: geocodedLocation[0].longitude,
+      longitudeDelta: 0.10968223214149475
+    });
+  }
 
   return (
     <View style={{marginTop: 50, flex:1}}>
-      {/* <TextInput placeholder="Address" value={address} onChangeText={handleAddressInput} />
-      <Button title="Geocode Address" onPress={geocode} /> */}
-      <Autocomplete myLocation={myLocation}/>
-    
-      <MapView
-        style={styles.map}
-        onRegionChange={onRegionChange}
-        initialRegion={{
-          // Dallas
-          latitude: 32.8053592247793,
-          latitudeDelta: 0.865790580988083,
-          longitude: -96.79484700876957,
-          longitudeDelta: 0.5265133564613365,
-        }}
-      >
-        <Marker
-          coordinate={{
-            latitude: myLocation.latitude,
-            longitude: myLocation.longitude,
-          }}
-          draggable={true}
-          onDragStart={(e) =>
-            console.log("Drag start: ", e.nativeEvent.coordinate)
-          }
-          onDragEnd={(e) => console.log("Drag end: ", e.nativeEvent.coordinate)}
-        >
-          <Callout>
-            <Text>I am here.</Text>
-          </Callout>
-        </Marker>
-      </MapView>
+      <Autocomplete 
+        myLocation={myLocation} 
+        setMyLocation={setMyLocation} 
+        geocode={geocode}
+      />
+      <Map 
+        myLocation={myLocation} 
+        setMyLocation={setMyLocation} 
+      />
       <StatusBar style="auto" />
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-});
+};

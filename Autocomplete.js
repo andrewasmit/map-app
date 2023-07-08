@@ -1,9 +1,21 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { API_KEY } from '@env'
+import { PLACES_API_KEY } from '@env'
+import * as Location from 'expo-location'
 
 
-function Autocomplete({ myLocation }) {
+function Autocomplete({ myLocation, setMyLocation, geocode }) {
+
+  const handleSearchSubmit = useCallback((data, details = null) => {
+    geocode(details.vicinity);
+    console.log(details.vicinity)
+  })
+
+  // const geocode = async (region)=>{
+  //   const geocodedLocation = await Location.geocodeAsync(region);
+  //   console.log("Geocoded Location: ")
+  //   console.log(geocodedLocation)
+  // }
 
   return (
     <GooglePlacesAutocomplete
@@ -12,11 +24,9 @@ function Autocomplete({ myLocation }) {
         GooglePlacesSearchQuery={{
           rankby: 'distance'
         }}
-        onPress={(data, details = null) => {
-          console.log(data, details);
-        }}
+        onPress={handleSearchSubmit}
         query={{
-          key: API_KEY,
+          key: PLACES_API_KEY,
           language: "en",
           components: 'country:us',
           types: 'establishment',
