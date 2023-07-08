@@ -8,14 +8,8 @@ function Autocomplete({ myLocation, setMyLocation, geocode }) {
 
   const handleSearchSubmit = useCallback((data, details = null) => {
     geocode(details.vicinity);
-    console.log(details.vicinity)
   })
 
-  // const geocode = async (region)=>{
-  //   const geocodedLocation = await Location.geocodeAsync(region);
-  //   console.log("Geocoded Location: ")
-  //   console.log(geocodedLocation)
-  // }
 
   return (
     <GooglePlacesAutocomplete

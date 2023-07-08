@@ -18,13 +18,6 @@ export default function Map({ myLocation, setMyLocation }) {
         provider={ PROVIDER_GOOGLE }
         onRegionChange={onRegionChange}
         region={myLocation}
-        // initialRegion={{
-        //   // Dallas
-        //   latitude: 32.8053592247793,
-        //   latitudeDelta: 0.865790580988083,
-        //   longitude: -96.79484700876957,
-        //   longitudeDelta: 0.5265133564613365,
-        // }}
       >
         <Marker
           coordinate={myLocation}
