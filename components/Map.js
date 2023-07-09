@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import MapView, { Callout, Marker } from "react-native-maps";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { PROVIDER_GOOGLE } from "react-native-maps";
+import CustomMarker from './CustomMarker';
 
 
 export default function Map({ myLocation, setMyLocation }) {
@@ -19,6 +20,7 @@ export default function Map({ myLocation, setMyLocation }) {
         onRegionChange={onRegionChange}
         region={myLocation}
       >
+        
         <Marker
           coordinate={myLocation}
           draggable={true}
@@ -27,6 +29,9 @@ export default function Map({ myLocation, setMyLocation }) {
           }
           onDragEnd={(e) => console.log("Drag end: ", e.nativeEvent.coordinate)}
         >
+          <View >
+            <CustomMarker />
+          </View>
           <Callout>
             <Text>I am here.</Text>
           </Callout>
