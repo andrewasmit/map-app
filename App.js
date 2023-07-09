@@ -44,6 +44,7 @@ export default function App() {
       longitude: geocodedLocation[0].longitude,
       longitudeDelta: 0.10968223214149475
     });
+    console.log("after geocode: ", myLocation);
   }
 
   return (
